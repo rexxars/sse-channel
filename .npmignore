@@ -1,0 +1,8 @@
+.gitignore
+.editorconfig
+.jshintignore
+.jshint
+.travis.yml
+npm-debug.log
+test/**/*
+test
