@@ -82,13 +82,13 @@ describe('sse-channel', function() {
     });
 
     it('can tell clients how long they should wait before reconnecting', function(done) {
-        initServer();
+        initServer({ retryTimeout: 3000 });
 
         channel.on('connect', function() {
             var disconnected;
 
-            // Tell clients to reconnect after approx 750 milliseconds
-            var retryTime = 75, threshold = retryTime / 7.5;
+            // Tell clients to reconnect after approx 75 milliseconds
+            var retryTime = 75;
             channel.retry(retryTime);
 
             // Remove the 'connect'-listener (for testing purposes, since we re-apply it below)
@@ -98,7 +98,7 @@ describe('sse-channel', function() {
             channel.on('connect', function() {
                 var timeUsed = Date.now() - disconnected;
                 assert.ok(
-                    timeUsed > (retryTime - threshold) && timeUsed < retryTime + threshold,
+                    timeUsed > (retryTime * 0.25) && timeUsed < (retryTime * 1.75),
                     'Client did not reconnect after ~' + retryTime + 'ms ' +
                     '(reconnected after ' + timeUsed + 'ms)'
                 );
