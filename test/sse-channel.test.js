@@ -426,4 +426,32 @@ describe('sse-channel', function() {
         req.setNoDelay(true);
         req.end();
     });
+
+    it('single event can contain event name, retry time, id and data', function(done) {
+        initServer();
+
+        var opts = url.parse(host + path);
+        opts.headers = { 'Accept': 'text/event-stream' };
+
+        var req = http.request(opts, function(res) {
+            var buf = '';
+            res.on('data', function(chunk) {
+                buf += chunk.toString();
+
+                if (buf.indexOf('Citra') > -1) {
+                    assert.ok(buf.indexOf('\nevent: drink\n') > -1);
+                    assert.ok(buf.indexOf('\nretry: 1800\n') > -1);
+                    assert.ok(buf.indexOf('\nid: 1337\n') > -1);
+                    assert.ok(buf.indexOf('\ndata: Reign in Citra\n') > -1);
+                    req.abort();
+                    done();
+                }
+            });
+
+            channel.send({ retry: 1800, id: 1337, event: 'drink', data: 'Reign in Citra' });
+        });
+
+        req.setNoDelay(true);
+        req.end();
+    });
 });
