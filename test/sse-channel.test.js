@@ -207,6 +207,28 @@ describe('sse-channel', function() {
         };
     });
 
+    it('can be configured to a specific max history size', function(done) {
+        initServer({ historySize: 5 });
+
+        var id = 100, msgCount = 0, lastMsg;
+        for (var i = 0; i < 100; i++) {
+            channel.send({ id: ++id, data: 'Event #' + id });
+        }
+
+        var assertMsgCount = _.debounce(function() {
+            assert.equal(msgCount, 5);
+            assert.equal(lastMsg.data, 'Event #' + id);
+            done();
+        }, 25);
+
+        es = new EventSource(host + path + '?lastEventId=110');
+        es.onmessage = function(e) {
+            msgCount++;
+            lastMsg = e;
+            assertMsgCount();
+        };
+    });
+
     it('provides a correct number of connections on channel', function(done) {
         initServer();
 
