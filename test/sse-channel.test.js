@@ -304,4 +304,44 @@ describe('sse-channel', function() {
             done();
         };
     });
+
+    it('does not allow CORS by default', function(done) {
+        initServer();
+
+        es = new EventSource(host + path, {
+            headers: {
+                Origin: 'http://imbo.io'
+            }
+        });
+
+        es.onerror = function(e) {
+            assert.equal(e.status, 403);
+            done();
+        };
+    });
+
+    it('can be configured to allow CORS', function(done) {
+        initServer({ cors: {
+            origins: ['http://imbo.io']
+        }});
+
+        var opts = url.parse(host + path);
+        opts.method = 'OPTIONS';
+        opts.headers = {
+            'Accept': 'text/event-stream',
+            'Origin': 'http://imbo.io',
+            'Last-Event-Id': '1337',
+            'Access-Control-Request-Method': 'GET'
+        };
+
+        var req = http.request(opts, function(res) {
+            assert.equal(res.headers['access-control-allow-origin'], 'http://imbo.io');
+            assert.equal(res.headers['access-control-allow-headers'], 'Last-Event-ID');
+
+            req.abort();
+            done();
+        });
+
+        req.end();
+    });
 });
