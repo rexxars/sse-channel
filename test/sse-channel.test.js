@@ -312,12 +312,13 @@ describe('sse-channel', function() {
         req.end();
     });
 
-    it('auto-serializes objects/arrays as JSON by default', function(done) {
-        initServer();
+    it('can auto-encode data as JSON', function(done) {
+        initServer({ jsonEncode: true });
 
         channel.on('connect', function() {
             channel.send({ data: ['foo', 'bar'] });
             channel.send({ data: { 'foo': 'bar' } });
+            channel.send({ data: 'Foobar' });
         });
 
         es = new EventSource(host + path);
@@ -327,11 +328,28 @@ describe('sse-channel', function() {
                 // Assume first message
                 assert.equal(data[0], 'foo');
                 assert.equal(data[1], 'bar');
+            } else if (_.isString(data)) {
+                // Assume second message
+                assert.equal(data, 'Foobar');
             } else {
-                // Assume object, second message
+                // Assume object, third message
                 assert.equal(data.foo, 'bar');
                 done();
             }
+        };
+    });
+
+    it('does not JSON-encode data by default', function(done) {
+        initServer();
+
+        channel.on('connect', function() {
+            channel.send({ data: { 'foo': 'bar' } });
+        });
+
+        es = new EventSource(host + path);
+        es.onmessage = function(e) {
+            assert.equal(e.data, '[object Object]');
+            done();
         };
     });
 
