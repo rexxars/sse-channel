@@ -2,9 +2,8 @@ language: node_js
 node_js:
   - "0.11"
   - "0.10"
-env:
-  global:
-    - secure: dBN7lrmkZKZ8KrCzV9OkSBUsTwp5sE7vNBZrRwTSNY6TAZOW9G//IVqULHU6FNubvcWKZ3WxeBej6AW4rhcopLgYE9tG1uMIWDpog4/rWLbeyk5Zd8AjhCGYO9ZYRt4Z5dRQZApI0wMXkOpz7cCi+GmPzZOQ7vw0KMm+LhCzlEg=
-    - secure: VxnfpgoA8CIxiMPUBDJC0Mu+lhqoFlRn3LOAy1N4hfBHPrDN0qXl5vY5VZReSsCS+5ZJxt0REdulAcuFCwWZLVy7eYCvp9wO7HzWdNCmVF3mQ8R8t9+tpRicYu1wp894NeRgSvfyx+7lh6Ki2VojKFjPL7IzOKAiuZTy3RGuqg4=
-addons:
-  sauce_connect: true
+script:
+  - "npm run test-travis"
+after_script:
+  - "npm install coveralls@2.11.x && cat coverage/lcov.info | coveralls"
+

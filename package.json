@@ -4,9 +4,11 @@
   "description": "Server-Sent Events \"channel\" where all messages are broadcasted to all connected clients, history is maintained automatically and server attempts to keep clients alive by sending \"keep-alive\" packets automatically.",
   "main": "index.js",
   "scripts": {
+    "coverage": "istanbul cover node_modules/.bin/_mocha -- --reporter spec",
     "lint": "jshint .",
     "pretest": "npm run lint",
     "test": "mocha --reporter spec",
+    "test-travis": "istanbul cover node_modules/.bin/_mocha --report lcovonly -- --reporter spec",
     "prepublish": "npm test && npm prune"
   },
   "repository": {
@@ -34,6 +36,7 @@
   },
   "devDependencies": {
     "eventsource": "^0.1.4",
+    "istanbul": "^0.3.2",
     "jshint": "^2.5.10",
     "mocha": "^2.0.1"
   }
