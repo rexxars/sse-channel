@@ -63,6 +63,51 @@ describe('sse-channel', function() {
         };
     });
 
+    it('can send messages to specific clients', function(done) {
+        initServer();
+
+        var privText = 'Private', count = 0;
+        channel.on('connect', function(req, res) {
+            // Wait for two clients to connect
+            if (++count !== 2) {
+                return;
+            }
+
+            channel.send({ id: 1, data: privText }, [res]);
+        });
+
+        // Should not receive the message
+        es = new EventSource(host + path);
+        es.onmessage = function(e) {
+            if (e.data === privText) {
+                throw new Error('EventSource client #1 should not receive the private message');
+            }
+        };
+        es.onopen = function() {
+            // Should receive the message
+            var es2 = new EventSource(host + path);
+            es2.onmessage = function(e) {
+                assert.equal(e.data, privText);
+                es2.close();
+
+                // Ensure the history is not populated with the "private" message
+                var pubText = 'Public';
+                channel.send({ id: 2, data: pubText });
+
+                var es3 = new EventSource(host + path, { headers: { 'Last-Event-Id': '0' } });
+                es3.onmessage = function(e) {
+                    es3.close();
+                    if (e.data === privText) {
+                        throw new Error('"Private" message found in history');
+                    }
+
+                    assert.equal(e.data, pubText);
+                    done();
+                };
+            };
+        };
+    });
+
     it('can broadcast messages with ID and type', function(done) {
         initServer();
 
