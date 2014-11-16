@@ -7,7 +7,6 @@
     "lint": "jshint .",
     "pretest": "npm run lint",
     "test": "mocha --reporter spec",
-    "test-full": "RUN_BROWSER_TESTS=1 && npm run test",
     "prepublish": "npm test && npm prune"
   },
   "repository": {
@@ -37,7 +36,6 @@
     "eventsource": "^0.1.4",
     "jshint": "^2.5.10",
     "mocha": "^2.0.1",
-    "node-static": "^0.7.6",
-    "webdriverio": "^2.3.0"
+    "node-static": "^0.7.6"
   }
 }
