@@ -185,6 +185,28 @@ describe('sse-channel', function() {
         };
     });
 
+    it('sends the right slice of the history', function(done) {
+        initServer();
+
+        var id = 1337, msgCount = 0, lastMsg;
+        for (var i = 0; i < 6; i++) {
+            channel.send({ id: ++id, data: 'Event #' + id });
+        }
+
+        var assertMsgCount = _.debounce(function() {
+            assert.equal(msgCount, 4);
+            assert.equal(lastMsg.data, 'Event #' + id);
+            done();
+        }, 25);
+
+        es = new EventSource(host + path + '?lastEventId=1339');
+        es.onmessage = function(e) {
+            msgCount++;
+            lastMsg = e;
+            assertMsgCount();
+        };
+    });
+
     it('provides a correct number of connections on channel', function(done) {
         initServer();
 
