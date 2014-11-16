@@ -14,7 +14,7 @@ SSE-implementation which can connects to any http request/response stream.
   - Auto-encode packets as JSON (configurable)
   - Supports CORS
   - Supports a [number](https://github.com/amvtek/EventSource) of [different](https://github.com/Yaffle/EventSource/) [polyfills](https://github.com/remy/polyfills/blob/master/EventSource.js)
-  - Polyfilled on the client side, this should work down to IE8 and Android 2.x
+  - If polyfilled on the client side, works down to IE8 and Android 2.x
   - Maintains active connection count per channel
 
 # Installing
