@@ -2,10 +2,10 @@ module.exports = process.env.CONTINUOUS_INTEGRATION ? [
     // CI-environment, include a range of different browsers
 
     // Desktop
-    { 'browserName': 'firefox' }, // Latest firefox
-    { 'browserName': 'firefox', 'version': 10 }, // Old firefox
-    { 'browserName': 'chrome' }, // Latest chrome
-    { 'browserName': 'chrome', 'version': 26 }, // Old chrome
+    { 'browserName': 'firefox', 'platform': 'Linux' }, // Latest firefox
+    { 'browserName': 'firefox', 'version': 10, 'platform': 'Linux' }, // Old firefox
+    { 'browserName': 'chrome', 'platform': 'Linux' }, // Latest chrome
+    { 'browserName': 'chrome', 'version': 26, 'platform': 'Linux' }, // Old chrome
     { 'browserName': 'safari', 'version': 7, 'platform': 'OS X 10.9' }, // Safari 7
     { 'browserName': 'opera', 'version': 12, 'platform': 'Windows 7'}, // Opera 12
     { 'browserName': 'internet explorer', 'version': 11, 'platform': 'Windows 7'}, // Internet Explorer 11

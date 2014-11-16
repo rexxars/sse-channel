@@ -13,7 +13,6 @@ describeTest('browsers', function() {
     this.timeout(15000); // It's Selenium.
 
     var defaults = {
-        //'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
         'build': process.env.TRAVIS_BUILD_NUMBER,
         'username': process.env.SAUCE_USERNAME,
         'accessKey': process.env.SAUCE_ACCESS_KEY
@@ -29,7 +28,7 @@ describeTest('browsers', function() {
 
     devices.forEach(function(device, i) {
         var caps = _.merge({}, defaults, device);
-        var version = device.version ? (' (' + device.version + ')') : '';
+        var version = device.version ? (' (v' + device.version + ')') : '';
         var platform = caps.platform ? (' - ' + platform) : '';
 
         describe(caps.browserName + version + platform, function() {
