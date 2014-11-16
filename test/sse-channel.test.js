@@ -389,4 +389,27 @@ describe('sse-channel', function() {
 
         req.end();
     });
+
+    it('sends initial retry-timeout if specified in channel config', function(done) {
+        initServer({ retryTimeout: 3000 });
+
+        var opts = url.parse(host + path);
+        opts.headers = { 'Accept': 'text/event-stream' };
+
+        var req = http.request(opts, function(res) {
+            var buf = '';
+            res.on('data', function(chunk) {
+                buf += chunk.toString();
+
+                if (buf.length >= 17) {
+                    assert.ok(buf.indexOf('retry: 3000\n') > -1);
+                    req.abort();
+                    done();
+                }
+            });
+        });
+
+        req.setNoDelay(true);
+        req.end();
+    });
 });
