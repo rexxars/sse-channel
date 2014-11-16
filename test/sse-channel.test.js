@@ -274,6 +274,29 @@ describe('sse-channel', function() {
         };
     });
 
+    it('can be given an array of events to pre-populate with', function(done) {
+        var msgs = [], id = 1337;
+        for (var i = 0; i < 10; i++) {
+            msgs.push({ id: ++id, data: 'Event #' + id });
+        }
+
+        initServer({ historySize: 5, history: msgs });
+
+        var msgCount = 0, lastMsg;
+        var assertMsgCount = _.debounce(function() {
+            assert.equal(msgCount, 5);
+            assert.equal(lastMsg.data, 'Event #' + id);
+            done();
+        }, 25);
+
+        es = new EventSource(host + path + '?lastEventId=1');
+        es.onmessage = function(e) {
+            msgCount++;
+            lastMsg = e;
+            assertMsgCount();
+        };
+    });
+
     it('provides a correct number of connections on channel', function(done) {
         initServer();
 
