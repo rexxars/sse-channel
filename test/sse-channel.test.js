@@ -350,6 +350,20 @@ describe('sse-channel', function() {
         };
     });
 
+    it('treats missing data property as empty string', function(done) {
+        initServer({ autoSerialize: false });
+
+        channel.on('connect', function() {
+            channel.send({ id: 1337 });
+        });
+
+        es = new EventSource(host + path);
+        es.onmessage = function(e) {
+            assert.equal(e.data, '');
+            done();
+        };
+    });
+
     it('does not allow CORS by default', function(done) {
         initServer();
 
