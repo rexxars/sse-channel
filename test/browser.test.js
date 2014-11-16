@@ -13,7 +13,7 @@ describeTest('browsers', function() {
     this.timeout(15000); // It's Selenium.
 
     var defaults = {
-        'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
+        //'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
         'build': process.env.TRAVIS_BUILD_NUMBER,
         'username': process.env.SAUCE_USERNAME,
         'accessKey': process.env.SAUCE_ACCESS_KEY
