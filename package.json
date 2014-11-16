@@ -35,7 +35,6 @@
   "devDependencies": {
     "eventsource": "^0.1.4",
     "jshint": "^2.5.10",
-    "mocha": "^2.0.1",
-    "node-static": "^0.7.6"
+    "mocha": "^2.0.1"
   }
 }
