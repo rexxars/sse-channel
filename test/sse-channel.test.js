@@ -364,6 +364,29 @@ describe('sse-channel', function() {
         };
     });
 
+    it('handles multi-line strings properly', function(done) {
+        initServer();
+
+        var text = [
+            'Line 1',
+            'Line 2',
+            '',
+            'Line 4',
+            'Line 5\n\n\n',
+            'Line ..9?'
+        ].join('\n');
+
+        channel.on('connect', function() {
+            channel.send(text);
+        });
+
+        es = new EventSource(host + path);
+        es.onmessage = function(e) {
+            assert.equal(e.data, text);
+            done();
+        };
+    });
+
     it('does not allow CORS by default', function(done) {
         initServer();
 
