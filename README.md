@@ -7,6 +7,7 @@ SSE-implementation which can connects to any http request/response stream.
 
   - Easily attach to any node.js http request
   - History is maintained automatically, max size is configurable
+  - Optionally pre-populate history when creating the channel
   - Automatically sends missed events to clients when reconnecting
   - Attempts to keep clients alive by sending "pings" automatically
   - Easily send messages to all clients or to specific clients
