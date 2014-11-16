@@ -170,9 +170,16 @@ describeTest('browsers', function() {
             });
 
             it('can provide a history of events if client is disconnected', function(done) {
-                channel.on('connect', function() {
-                    var id = 1337;
+                var id = 1337;
 
+                channel.on('disconnect', function() {
+                    // Quickly send 5 new messages (before client reconnects)
+                    for (var i = 0; i < 5; i++) {
+                        channel.send({ id: ++id, data: 'Event #' + id });
+                    }
+                });
+
+                channel.on('connect', function() {
                     // Tell clients to reconnect after approx 1.5 second
                     channel.retry(1500);
 
@@ -197,12 +204,7 @@ describeTest('browsers', function() {
                     });
 
                     // Disconnect all clients on the channel
-                    channel.close(function() {
-                        // Quickly send 5 new messages (before client reconnects)
-                        for (var i = 0; i < 5; i++) {
-                            channel.send({ id: ++id, data: 'Event #' + id });
-                        }
-                    });
+                    channel.close();
                 });
             });
         });

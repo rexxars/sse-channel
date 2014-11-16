@@ -1,6 +1,7 @@
-/* global beforeEach, afterEach, describe, it */
+/* global afterEach, describe, it */
 'use strict';
 
+var _ = require('lodash');
 var assert = require('assert');
 var http = require('http');
 var url = require('url');
@@ -8,15 +9,17 @@ var serverInit = require('./util/server-init');
 var EventSource = require('eventsource');
 
 describe('sse-channel', function() {
+    this.timeout(5000);
+
     var port = process.env.TESTING_PORT || 6775;
     var host = 'http://localhost:' + port;
     var server, channel, es, path = '/sse';
 
-    beforeEach(function() {
-        var tmp = serverInit({ port: port, path: path });
+    function initServer(opts) {
+        var tmp = serverInit(_.merge({}, { port: port, path: path }, opts || {}));
         server = tmp.server;
         channel = tmp.channel;
-    });
+    }
 
     afterEach(function(done) {
         if (es) {
@@ -31,6 +34,8 @@ describe('sse-channel', function() {
     });
 
     it('can broadcast simple message', function(done) {
+        initServer();
+
         var text = 'First event!';
 
         channel.on('connect', function() {
@@ -45,6 +50,8 @@ describe('sse-channel', function() {
     });
 
     it('represents messages without event name as "message"', function(done) {
+        initServer();
+
         channel.on('connect', function() {
             channel.send('Moo');
         });
@@ -57,6 +64,8 @@ describe('sse-channel', function() {
     });
 
     it('can broadcast messages with ID and type', function(done) {
+        initServer();
+
         var data = 'Reign in Citra';
 
         channel.on('connect', function() {
@@ -73,6 +82,8 @@ describe('sse-channel', function() {
     });
 
     it('can tell clients how long they should wait before reconnecting', function(done) {
+        initServer();
+
         channel.on('connect', function() {
             var disconnected;
 
@@ -103,6 +114,8 @@ describe('sse-channel', function() {
     });
 
     it('can provide a history of events if client is disconnected', function(done) {
+        initServer();
+
         var id = 1337, msgCount = 0;
         for (var i = 0; i < 6; i++) {
             channel.send({ id: ++id, data: 'Event #' + id });
@@ -119,6 +132,8 @@ describe('sse-channel', function() {
     });
 
     it('can provide a history of events through "evs_last_event_id"-query param', function(done) {
+        initServer();
+
         var id = 1337, msgCount = 0;
         for (var i = 0; i < 6; i++) {
             channel.send({ id: ++id, data: 'Event #' + id });
@@ -133,6 +148,8 @@ describe('sse-channel', function() {
     });
 
     it('can provide a history of events through "lastEventId"-query param', function(done) {
+        initServer();
+
         var id = 1337, msgCount = 0;
         for (var i = 0; i < 6; i++) {
             channel.send({ id: ++id, data: 'Event #' + id });
@@ -147,6 +164,8 @@ describe('sse-channel', function() {
     });
 
     it('does not send history by default', function(done) {
+        initServer();
+
         var id = 1337, msgCount = 0;
         for (var i = 0; i < 6; i++) {
             channel.send({ id: ++id, data: 'Event #' + id });
@@ -166,6 +185,8 @@ describe('sse-channel', function() {
     });
 
     it('provides a correct number of connections on channel', function(done) {
+        initServer();
+
         var connections = channel.getConnectionCount();
         assert.equal(connections, 0, 'Initial connection count should be 0, got ' + connections);
 
@@ -191,13 +212,10 @@ describe('sse-channel', function() {
         };
     });
 
-/*
-    it.only('sends automatic pings', function(done) {
+    it('sends automatic pings', function(done) {
         // We'll want to use some custom logic for the channel here
         var interval = 25;
-        var tmp = serverInit({ port: port, path: path, pingInterval: interval });
-        server = tmp.server;
-        channel = tmp.channel;
+        initServer({ pingInterval: interval });
 
         var opts = url.parse(host + path);
         opts.headers = { 'Accept': 'text/event-stream' };
@@ -209,11 +227,81 @@ describe('sse-channel', function() {
             });
 
             setTimeout(function() {
-                console.log(buf);
                 req.abort();
+                assert.ok(
+                    buf.match(/\:\n/g).length >= 5,
+                    'Expected at least 5 pings within ' + (interval * 7) + 'ms'
+                );
                 done();
-            }, interval * 5);
+            }, interval * 7);
         });
+
+        req.setNoDelay(true);
+        req.end();
     });
-*/
+
+    it('sends "preamble" if client requests it', function(done) {
+        initServer();
+
+        var opts = url.parse(host + path + '?evs_preamble=1');
+        opts.headers = { 'Accept': 'text/event-stream' };
+
+        var req = http.request(opts, function(res) {
+            var buf = '';
+            res.on('data', function(chunk) {
+                buf += chunk.toString();
+
+                if (buf.match(/\-{3}\n/)) {
+                    assert.ok(
+                        buf.match(/\:\-{2056,}/),
+                        'Preamble of 2kb not present in response'
+                    );
+
+                    req.abort();
+                    done();
+                }
+            });
+        });
+
+        req.setNoDelay(true);
+        req.end();
+    });
+
+    it('auto-serializes objects/arrays as JSON by default', function(done) {
+        initServer();
+
+        channel.on('connect', function() {
+            channel.send({ data: ['foo', 'bar'] });
+            channel.send({ data: { 'foo': 'bar' } });
+        });
+
+        es = new EventSource(host + path);
+        es.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+            if (_.isArray(data)) {
+                // Assume first message
+                assert.equal(data[0], 'foo');
+                assert.equal(data[1], 'bar');
+            } else {
+                // Assume object, second message
+                assert.equal(data.foo, 'bar');
+                done();
+            }
+        };
+    });
+
+    it('treats buffers as strings when autoSerialize is turned off', function(done) {
+        initServer({ autoSerialize: false });
+
+        var msg = 'Heard about this project called Imbo(.io)?';
+        channel.on('connect', function() {
+            channel.send({ data: new Buffer(msg) });
+        });
+
+        es = new EventSource(host + path);
+        es.onmessage = function(e) {
+            assert.equal(e.data, msg);
+            done();
+        };
+    });
 });
