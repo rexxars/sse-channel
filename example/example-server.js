@@ -1,6 +1,8 @@
 'use strict';
 
+// Should be `require('sse-channel')` when outside of sse-channel repo
 var SseChannel = require('../');
+
 var stc  = require('node-static');
 var http = require('http');
 var os = require('os');
