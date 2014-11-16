@@ -29,7 +29,7 @@ describeTest('browsers', function() {
     devices.forEach(function(device, i) {
         var caps = _.merge({}, defaults, device);
         var version = device.version ? (' (v' + device.version + ')') : '';
-        var platform = caps.platform ? (' - ' + platform) : '';
+        var platform = caps.platform ? (' - ' + caps.platform) : '';
 
         describe(caps.browserName + version + platform, function() {
             var wdOptions = _.merge(wdOpts, {
