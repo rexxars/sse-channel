@@ -1,7 +1,7 @@
 sse-channel (Server-Sent Events channel)
 ========================================
 
-[![Version npm](http://img.shields.io/npm/v/sse-channel.svg?style=flat-square)](http://browsenpm.org/package/sse-channel)[![Build Status](http://img.shields.io/travis/rexxars/sse-channel/master.svg?style=flat-square)](https://travis-ci.org/rexxars/sse-channel)[![Dependencies](https://img.shields.io/david/rexxars/sse-channel.svg?style=flat-square)](https://david-dm.org/rexxars/sse-channel)[![Coverage Status](http://img.shields.io/coveralls/rexxars/sse-channel/master.svg?style=flat-square)](https://coveralls.io/r/rexxars/sse-channel?branch=master)
+[![Version npm](http://img.shields.io/npm/v/sse-channel.svg?style=flat-square)](http://browsenpm.org/package/sse-channel)[![Build Status](http://img.shields.io/travis/rexxars/sse-channel/master.svg?style=flat-square)](https://travis-ci.org/rexxars/sse-channel)[![Dependencies](https://img.shields.io/david/rexxars/sse-channel.svg?style=flat-square)](https://david-dm.org/rexxars/sse-channel)[![Coverage Status](http://img.shields.io/coveralls/rexxars/sse-channel/master.svg?style=flat-square)](https://coveralls.io/r/rexxars/sse-channel?branch=master)[![Code Climate](http://img.shields.io/codeclimate/github/rexxars/sse-channel.svg?style=flat-square)](https://codeclimate.com/github/rexxars/sse-channel/)
 
 SSE-implementation which can connects to any http request/response stream.
 
