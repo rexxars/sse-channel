@@ -67,7 +67,7 @@ describe('sse-channel', function() {
         initServer();
 
         var privText = 'Private', count = 0;
-        channel.on('connect', function(req, res) {
+        channel.on('connect', function(channel, req, res) {
             // Wait for two clients to connect
             if (++count !== 2) {
                 return;
