@@ -252,6 +252,28 @@ describe('sse-channel', function() {
         };
     });
 
+    it('only includes the latest event with the same ID', function(done) {
+        initServer();
+
+        var id = 1337, msgCount = 0, lastMsg;
+        for (var i = 0; i < 6; i++) {
+            channel.send({ id: 1337, data: 'Event #' + id });
+        }
+
+        var assertMsgCount = _.debounce(function() {
+            assert.equal(msgCount, 1);
+            assert.equal(lastMsg.data, 'Event #' + id);
+            done();
+        }, 25);
+
+        es = new EventSource(host + path + '?lastEventId=1330');
+        es.onmessage = function(e) {
+            msgCount++;
+            lastMsg = e;
+            assertMsgCount();
+        };
+    });
+
     it('can be configured to a specific max history size', function(done) {
         initServer({ historySize: 5 });
 
