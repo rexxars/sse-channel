@@ -63,6 +63,32 @@ describe('sse-channel', function() {
         };
     });
 
+    it('addClient calls the specified callback when finished serving initial data', function(done) {
+        initServer({
+            addClientCallback: function(err) {
+                assert.ifError(err);
+                done();
+            }
+        });
+
+        es = new EventSource(host + path);
+    });
+
+    it('addClient calls the specified callback with error if cors fails', function(done) {
+        initServer({
+            addClientCallback: function(err) {
+                assert.ok(err);
+                done();
+            }
+        });
+
+        es = new EventSource(host + path, {
+            headers: {
+                Origin: 'http://imbo.io'
+            }
+        });
+    });
+
     it('can send messages to specific clients', function(done) {
         initServer();
 
