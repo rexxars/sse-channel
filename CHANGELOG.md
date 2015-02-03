@@ -7,4 +7,4 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Changelog!
 
-[1.0.4]: https://github.com/rexxars/sse-channel/compare/1.0.4...1.0.3
+[1.0.4]: https://github.com/rexxars/sse-channel/compare/1.0.3...1.0.4
