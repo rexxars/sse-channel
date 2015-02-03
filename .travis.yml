@@ -11,3 +11,6 @@ after_script:
 env:
   global:
     secure: XMYPobFT192HVOxbTtl7hGdimycDqXwC4Unv3rLkrf527VXx7O1i+chXkKn3i5BpQh68/2a9mQwgFGD73rxQ6fzn57ZidX67d4wRUFDFOqQudH6MjZKHfIb9Q3FjSkkmku1sIv/AnEIAQMX87QPPeoss1+BY5i4nQWRLouH6xpU=
+matrix:
+  allow_failures:
+    - node_js: iojs
