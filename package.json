@@ -6,7 +6,8 @@
   "scripts": {
     "coverage": "istanbul cover node_modules/.bin/_mocha -- --reporter spec",
     "lint": "jshint .",
-    "pretest": "npm run lint",
+    "cs": "jscs .",
+    "pretest": "npm run lint && npm run cs",
     "test": "mocha --reporter spec",
     "test-travis": "istanbul cover node_modules/.bin/_mocha --report lcovonly -- --reporter spec",
     "prepublish": "npm test && npm prune"
@@ -37,6 +38,7 @@
   "devDependencies": {
     "eventsource": "^0.1.4",
     "istanbul": "^0.3.2",
+    "jscs": "^1.10.0",
     "jshint": "^2.5.10",
     "mocha": "^2.0.1"
   }

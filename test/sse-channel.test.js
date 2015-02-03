@@ -354,18 +354,30 @@ describe('sse-channel', function() {
         es = new EventSource(host + path);
         es.onopen = function() {
             connections = channel.getConnectionCount();
-            assert.equal(connections, 1, 'Connection count after opening first connection should be 1, got ' + connections);
+            assert.equal(
+                connections,
+                1,
+                'Connection count after opening first connection should be 1, got ' + connections
+            );
 
             process.nextTick(function() {
                 var es2 = new EventSource(host + path);
                 es2.onopen = function() {
                     connections = channel.getConnectionCount();
-                    assert.equal(connections, 2, 'Connection count after opening second connection should be 2, got ' + connections);
+                    assert.equal(
+                        connections,
+                        2,
+                        'Connection count after opening second connection should be 2, got ' + connections
+                    );
                     es2.close();
 
                     setTimeout(function() {
                         connections = channel.getConnectionCount();
-                        assert.equal(connections, 1, 'Connection count after disconnecting one session should be 1, got ' + connections);
+                        assert.equal(
+                            connections,
+                            1,
+                            'Connection count after disconnecting one session should be 1, got ' + connections
+                        );
                         done();
                     }, 25);
                 };
@@ -379,7 +391,7 @@ describe('sse-channel', function() {
         initServer({ pingInterval: interval });
 
         var opts = url.parse(host + path);
-        opts.headers = { 'Accept': 'text/event-stream' };
+        opts.headers = { Accept: 'text/event-stream' };
 
         var req = http.request(opts, function(res) {
             var buf = '';
@@ -405,7 +417,7 @@ describe('sse-channel', function() {
         initServer();
 
         var opts = url.parse(host + path + '?evs_preamble=1');
-        opts.headers = { 'Accept': 'text/event-stream' };
+        opts.headers = { Accept: 'text/event-stream' };
 
         var req = http.request(opts, function(res) {
             var buf = '';
@@ -433,7 +445,7 @@ describe('sse-channel', function() {
 
         channel.on('connect', function() {
             channel.send({ data: ['foo', 'bar'] });
-            channel.send({ data: { 'foo': 'bar' } });
+            channel.send({ data: { foo: 'bar' } });
             channel.send({ data: 'Foobar' });
         });
 
@@ -459,7 +471,7 @@ describe('sse-channel', function() {
         initServer();
 
         channel.on('connect', function() {
-            channel.send({ data: { 'foo': 'bar' } });
+            channel.send({ data: { foo: 'bar' } });
         });
 
         es = new EventSource(host + path);
@@ -544,8 +556,8 @@ describe('sse-channel', function() {
         var opts = url.parse(host + path);
         opts.method = 'OPTIONS';
         opts.headers = {
-            'Accept': 'text/event-stream',
-            'Origin': 'http://imbo.io',
+            Accept: 'text/event-stream',
+            Origin: 'http://imbo.io',
             'Last-Event-Id': '1337',
             'Access-Control-Request-Method': 'GET'
         };
@@ -565,7 +577,7 @@ describe('sse-channel', function() {
         initServer({ retryTimeout: 3000 });
 
         var opts = url.parse(host + path);
-        opts.headers = { 'Accept': 'text/event-stream' };
+        opts.headers = { Accept: 'text/event-stream' };
 
         var req = http.request(opts, function(res) {
             var buf = '';
@@ -588,7 +600,7 @@ describe('sse-channel', function() {
         initServer();
 
         var opts = url.parse(host + path);
-        opts.headers = { 'Accept': 'text/event-stream' };
+        opts.headers = { Accept: 'text/event-stream' };
 
         var req = http.request(opts, function(res) {
             var buf = '';

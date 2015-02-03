@@ -67,7 +67,6 @@
         randomNumberEl.insertBefore(newEl, randomNumberEl.firstChild);
     };
 
-
     // Just a simple chart drawer, not related to SSE-channel
     function drawChart(canvas, data) {
         var ctx = canvas.getContext('2d'),
@@ -79,7 +78,7 @@
             xstep = 1,
             ystep = max / height,
             x = 0,
-            y = height - data[0]/ystep;
+            y = height - data[0] / ystep;
 
         ctx.clearRect(0, 0, width, height);
         ctx.beginPath();
