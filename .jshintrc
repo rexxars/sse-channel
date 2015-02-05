@@ -2,6 +2,7 @@
     "node": true,
     "browser": true,
     "esnext": true,
+    "es3": true,
     "bitwise": false,
     "curly": true,
     "eqeqeq": true,

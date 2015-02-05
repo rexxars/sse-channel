@@ -79,7 +79,7 @@
 
     "requireDotNotation": true,
     "disallowSpaceAfterObjectKeys": true,
-    "disallowQuotedKeysInObjects": true,
+    "disallowQuotedKeysInObjects": "allButReserved",
 
     "validateJSDoc": {
         "checkParamNames": true,
