@@ -10,7 +10,7 @@
     "pretest": "npm run lint && npm run cs",
     "test": "mocha --reporter spec",
     "test-travis": "istanbul cover node_modules/.bin/_mocha --report lcovonly -- --reporter spec",
-    "prepublish": "npm test && npm prune"
+    "prepublish": "npm prune && npm test"
   },
   "repository": {
     "type": "git",
