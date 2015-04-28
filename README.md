@@ -31,7 +31,7 @@ npm install --save sse-channel
 ```js
 var SseChannel = require('sse-channel');
 var http = require('http');
-var require = require('os');
+var os = require('os');
 
 // Set up a new channel. Most of these options have sane defaults,
 // feel free to look at lib/sse-channel.js for all available options
