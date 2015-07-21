@@ -8,6 +8,7 @@ var assert = require('assert');
 var debounce = require('lodash/function/debounce');
 var runAfter = require('lodash/function/after');
 var serverInit = require('./util/server-init');
+var SseChannel = require('../');
 var EventSource = require('eventsource');
 
 describe('sse-channel', function() {
@@ -33,6 +34,12 @@ describe('sse-channel', function() {
         }
 
         done();
+    });
+
+    it('can be constructed without options', function() {
+        assert.doesNotThrow(function() {
+            channel = new SseChannel();
+        }, 'should not throw if constructed without options');
     });
 
     it('can broadcast simple message', function(done) {
