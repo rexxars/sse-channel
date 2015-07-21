@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "coverage": "istanbul cover node_modules/.bin/_mocha -- --reporter spec",
-    "lint": "jshint .",
-    "cs": "jscs .",
-    "pretest": "npm run lint && npm run cs",
+    "lint": "eslint .",
+    "pretest": "npm run lint",
     "test": "mocha --reporter spec",
     "test-travis": "istanbul cover node_modules/.bin/_mocha --report lcovonly -- --reporter spec",
     "prepublish": "npm prune && npm test"
@@ -30,16 +29,22 @@
   "bugs": {
     "url": "https://github.com/rexxars/sse-channel/issues"
   },
+  "eslintConfig": {
+    "extends": "vaffel",
+    "rules": {
+      "no-bitwise": 0
+    }
+  },
   "homepage": "https://github.com/rexxars/sse-channel",
   "dependencies": {
     "access-control": "0.0.7",
     "lodash": "^3.7.0"
   },
   "devDependencies": {
+    "eslint": "^0.24.1",
+    "eslint-config-vaffel": "^1.0.0",
     "eventsource": "^0.1.6",
     "istanbul": "^0.3.13",
-    "jscs": "^1.12.0",
-    "jshint": "^2.7.0",
     "mocha": "^2.2.4"
   }
 }

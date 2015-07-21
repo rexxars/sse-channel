@@ -1,10 +1,11 @@
 /* global afterEach, describe, it */
 'use strict';
 
-var _ = require('lodash');
-var assert = require('assert');
-var http = require('http');
 var url = require('url');
+var http = require('http');
+var merge = require('lodash/object/merge');
+var assert = require('assert');
+var debounce = require('lodash/function/debounce');
 var serverInit = require('./util/server-init');
 var EventSource = require('eventsource');
 
@@ -16,7 +17,7 @@ describe('sse-channel', function() {
     var server, channel, es, path = '/sse';
 
     function initServer(opts) {
-        var tmp = serverInit(_.merge({}, { port: port, path: path }, opts || {}));
+        var tmp = serverInit(merge({}, { port: port, path: path }, opts || {}));
         server = tmp.server;
         channel = tmp.channel;
     }
@@ -93,13 +94,13 @@ describe('sse-channel', function() {
         initServer();
 
         var privText = 'Private', count = 0;
-        channel.on('connect', function(channel, req, res) {
+        channel.on('connect', function(chan, req, res) {
             // Wait for two clients to connect
             if (++count !== 2) {
                 return;
             }
 
-            channel.send({ id: 1, data: privText }, [res]);
+            chan.send({ id: 1, data: privText }, [res]);
         });
 
         // Should not receive the message
@@ -121,13 +122,13 @@ describe('sse-channel', function() {
                 channel.send({ id: 2, data: pubText });
 
                 var es3 = new EventSource(host + path, { headers: { 'Last-Event-Id': '0' } });
-                es3.onmessage = function(e) {
+                es3.onmessage = function(e3) {
                     es3.close();
-                    if (e.data === privText) {
+                    if (e3.data === privText) {
                         throw new Error('"Private" message found in history');
                     }
 
-                    assert.equal(e.data, pubText);
+                    assert.equal(e3.data, pubText);
                     done();
                 };
             };
@@ -195,7 +196,9 @@ describe('sse-channel', function() {
 
         es = new EventSource(host + path, { headers: { 'Last-Event-Id': '1337' } });
         es.onmessage = function(e) {
-            if (++msgCount !== 6) { return; }
+            if (++msgCount !== 6) {
+                return;
+            }
 
             // Data should correspond to the last message we sent
             assert.equal(e.data, 'Event #' + id);
@@ -213,7 +216,9 @@ describe('sse-channel', function() {
 
         es = new EventSource(host + path + '?evs_last_event_id=1337');
         es.onmessage = function(e) {
-            if (++msgCount !== 6) { return; }
+            if (++msgCount !== 6) {
+                return;
+            }
             assert.equal(e.data, 'Event #' + id);
             done();
         };
@@ -229,7 +234,9 @@ describe('sse-channel', function() {
 
         es = new EventSource(host + path + '?lastEventId=1337');
         es.onmessage = function(e) {
-            if (++msgCount !== 6) { return; }
+            if (++msgCount !== 6) {
+                return;
+            }
             assert.equal(e.data, 'Event #' + id);
             done();
         };
@@ -264,7 +271,7 @@ describe('sse-channel', function() {
             channel.send({ id: ++id, data: 'Event #' + id });
         }
 
-        var assertMsgCount = _.debounce(function() {
+        var assertMsgCount = debounce(function() {
             assert.equal(msgCount, 4);
             assert.equal(lastMsg.data, 'Event #' + id);
             done();
@@ -286,7 +293,7 @@ describe('sse-channel', function() {
             channel.send({ id: 1337, data: 'Event #' + id });
         }
 
-        var assertMsgCount = _.debounce(function() {
+        var assertMsgCount = debounce(function() {
             assert.equal(msgCount, 1);
             assert.equal(lastMsg.data, 'Event #' + id);
             done();
@@ -308,7 +315,7 @@ describe('sse-channel', function() {
             channel.send({ id: ++id, data: 'Event #' + id });
         }
 
-        var assertMsgCount = _.debounce(function() {
+        var assertMsgCount = debounce(function() {
             assert.equal(msgCount, 5);
             assert.equal(lastMsg.data, 'Event #' + id);
             done();
@@ -331,7 +338,7 @@ describe('sse-channel', function() {
         initServer({ historySize: 5, history: msgs });
 
         var msgCount = 0, lastMsg;
-        var assertMsgCount = _.debounce(function() {
+        var assertMsgCount = debounce(function() {
             assert.equal(msgCount, 5);
             assert.equal(lastMsg.data, 'Event #' + id);
             done();
@@ -452,11 +459,11 @@ describe('sse-channel', function() {
         es = new EventSource(host + path);
         es.onmessage = function(e) {
             var data = JSON.parse(e.data);
-            if (_.isArray(data)) {
+            if (Array.isArray(data)) {
                 // Assume first message
                 assert.equal(data[0], 'foo');
                 assert.equal(data[1], 'bar');
-            } else if (_.isString(data)) {
+            } else if (typeof data === 'string') {
                 // Assume second message
                 assert.equal(data, 'Foobar');
             } else {

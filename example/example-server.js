@@ -3,11 +3,12 @@
 // Should be `require('sse-channel')` when outside of sse-channel repo
 var SseChannel = require('../');
 
-var stc  = require('node-static');
-var http = require('http');
 var os = require('os');
+var stc = require('node-static');
+var http = require('http');
+var path = require('path');
 var port = process.argv[2] || 7553;
-var file = new stc.Server(__dirname + '/public');
+var file = new stc.Server(path.join(__dirname, 'public'));
 
 /**
  * This channel will provide system information (load average + free memory)

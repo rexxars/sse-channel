@@ -1,9 +1,8 @@
 'use strict';
 
 (function(doc) {
-
-    var freeMemCanvas  = doc.getElementById('freemem'),
-        loadAvgCanvas  = doc.getElementById('loadavg'),
+    var freeMemCanvas = doc.getElementById('freemem'),
+        loadAvgCanvas = doc.getElementById('loadavg'),
         freeMemHistory = [],
         loadAvgHistory = [],
         randomNumberEl = doc.getElementById('random-numbers');
@@ -86,7 +85,7 @@
         ctx.moveTo(x, y);
 
         for (var i = 1; i < total; i++) {
-            x = x + xstep;
+            x += xstep;
             y = height - data[i] / ystep + 1;
             ctx.moveTo(x, height);
             ctx.lineTo(x, y);
@@ -94,4 +93,4 @@
 
         ctx.stroke();
     }
-})(document);
+}(document));
