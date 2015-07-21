@@ -6,6 +6,7 @@ var http = require('http');
 var merge = require('lodash/object/merge');
 var assert = require('assert');
 var debounce = require('lodash/function/debounce');
+var runAfter = require('lodash/function/after');
 var serverInit = require('./util/server-init');
 var EventSource = require('eventsource');
 
@@ -629,5 +630,33 @@ describe('sse-channel', function() {
 
         req.setNoDelay(true);
         req.end();
+    });
+
+    it('calls flush() after writes if the method exists on response', function(done) {
+        // Initialize a server with a custom `flush()` method added on each incoming request,
+        // mimicking the `compression` middleware. Check that we call `flush()`:
+        //   - On connect, after the initial headers, retry, and preamble has been written
+        //   - After "missed events" have been sent (once)
+        //   - After each broadcast
+        var flushes = 0;
+        initServer({
+            flush: function() {
+                flushes++;
+            },
+            history: [
+                { id: 1338, data: 'Event #1338' },
+                { id: 1339, data: 'Event #1339' }
+            ]
+        });
+
+        es = new EventSource(host + path + '?lastEventId=1337&evs_preamble=1');
+        es.onopen = function() {
+            channel.send('We set sail from the sweet cove of Cork');
+            channel.send('With seven million barrels of porter');
+        };
+        es.onmessage = runAfter(4, function() {
+            assert.equal(flushes, 4);
+            done();
+        });
     });
 });
