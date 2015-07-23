@@ -21,7 +21,7 @@
      * just specify a low event ID, in which case it returns the last entries up
      * to the history limit.
      */
-    var sysInfoSource = new window.EventSource('/channel/sysinfo?lastEventId=0');
+    var sysInfoSource = new window.EventSource('/channel/sysInfo?lastEventId=0');
 
     // We're using custom event names instead of an 'onmessage'-listener here - neat?
     sysInfoSource.addEventListener('freemem', function(e) {
