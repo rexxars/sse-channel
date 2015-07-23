@@ -71,7 +71,7 @@ All instances of `SseChannel` have the following methods:
 
 ### channel.addClient(request, response, [callback])
 
-Add a client to the channel. `request` is the `http.Request` instance for the connection, while `response` is the `http.Response` instance to write data to.
+Add a client to the channel. `request` is the `http.IncomingMessage` instance for the connection, while `response` is the `http.ServerResponse` instance to write data to.
 
 If specified, the `callback` supplied will be called once the client has been added. The first argument to the callback can be an error if the request was cross-origin and did not validate against the provided CORS configuration.
 
@@ -108,6 +108,14 @@ Send events since a given ID from the channel history to the specified client. U
 ### channel.close()
 
 Close all connections on this channel. Note that this will usually only trigger all clients to reconnect, which is probably not what you want. You probably want to implement some sort of `disconnect`-contract between the server and client, before you call this.
+
+# Events
+
+`SseChannel` implements the EventEmitter contract, and emits the following events:
+
+* `connect` - When a client has successfully connected and the initial headers have been queued for writing. Listeners are provided with the following arguments: `channel`, `request`, `response`
+* `disconnect` - When a client closes the connection for any reason. Listeners are provided with the following arguments: `channel`, `response`
+* `message` - When a message has been queued for sending. Listeners are provided with the following arguments: `channel`, `msg`, `clients`. In this case, `clients` is an array of either the clients provided or the full array of clients.
 
 # Advanced example
 

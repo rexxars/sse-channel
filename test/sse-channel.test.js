@@ -22,6 +22,7 @@ describe('sse-channel', function() {
         var tmp = serverInit(merge({}, { port: port, path: path }, opts || {}));
         server = tmp.server;
         channel = tmp.channel;
+        return channel;
     }
 
     afterEach(function(done) {
@@ -685,5 +686,61 @@ describe('sse-channel', function() {
             assert.equal(flushes, 4);
             done();
         });
+    });
+
+    it('emits connect/disconnect/message events', function(done) {
+        channel = initServer();
+
+        var connections = [];
+        var status = {
+            connect: 0,
+            disconnect: 0,
+            message: 0
+        };
+
+        channel.on('connect', function(chan, req, res) {
+            assert.equal(channel, chan);
+            assert.ok(req instanceof http.IncomingMessage);
+            assert.ok(res instanceof http.ServerResponse);
+
+            if (++status.connect === 2) {
+                channel.send('foobar');
+                channel.send({ data: 'barfoo' }, [res]);
+            }
+        });
+
+        channel.on('message', function(chan, msg, clients) {
+            assert.equal(channel, chan);
+
+            if (++status.message === 1) {
+                assert.equal(msg, 'foobar');
+                assert.equal(clients.length, 2);
+                assert.ok(clients[0] instanceof http.ServerResponse);
+                assert.ok(clients[1] instanceof http.ServerResponse);
+            } else {
+                assert.equal(msg.data, 'barfoo');
+                assert.equal(clients.length, 1);
+                assert.ok(clients[0] instanceof http.ServerResponse);
+
+                connections.forEach(function(conn) {
+                    conn.close();
+                });
+            }
+        });
+
+        channel.on('disconnect', function(chan, res) {
+            assert.equal(channel, chan);
+            assert.ok(res instanceof http.ServerResponse);
+
+            if (++status.disconnect === 2) {
+                assert.equal(status.connect, 2);
+                assert.equal(status.disconnect, 2);
+                assert.equal(status.message, 2);
+                done();
+            }
+        });
+
+        connections.push(new EventSource(host + path));
+        connections.push(new EventSource(host + path));
     });
 });
