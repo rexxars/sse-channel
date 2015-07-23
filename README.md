@@ -54,7 +54,62 @@ http.createServer(function(req, res) {
 });
 ```
 
-# More advanced usage
+# Options
+
+The following are available as options to the `SseChannel` constructor.
+
+- `historySize` - The maximum number of messages to keep in history. Note: Only messages with an `id` property are saved to history. Default: `500`
+- `history` - Array of messages to pre-populate the history with. Note: If the size of the array specified exceeds the specified `historySize`, the array will be sliced to contain only the last `X` elements. Default: `[]`
+- `retryTimeout` - How many milliseconds clients should wait before attempting to reconnect, if disconnected. Default: `undefined` - browser default.
+- `pingInterval` - How often the server should send a "ping" to clients in order to keep the connection alive (milliseconds). Default: `20000` (20s)
+- `jsonEncode` - Whether the client should auto-encode messages as JSON before sending. Default: `false`.
+- `cors` - An object of options related to Cross-Origin Resource Sharing. Uses the [access-control](https://www.npmjs.org/package/access-control) module - see that for options. Note: The `Last-Event-ID`-header needs to be allowed. By default, no origins are allowed.
+
+# Methods
+
+All instances of `SseChannel` have the following methods:
+
+### channel.addClient(request, response, [callback])
+
+Add a client to the channel. `request` is the `http.Request` instance for the connection, while `response` is the `http.Response` instance to write data to.
+
+If specified, the `callback` supplied will be called once the client has been added. The first argument to the callback can be an error if the request was cross-origin and did not validate against the provided CORS configuration.
+
+### channel.removeClient(response)
+
+Removes a client (`response`) from a channel. Note that this does not actually close the connection - for that, use `response.end()`. Also worth mentioning is that most clients will see this as an unintentional disconnect and will thus attempt to reconnect. Developers are encouraged to implement some sort of `disconnect` event that can be sent prior to disconnecting clients.
+
+### channel.getConnectionCount()
+
+Get the number of active connections currently connected to the channel.
+
+### channel.ping()
+
+Manually broadcast a "ping" to all connected clients, to keep the connections alive. Note that this is handled automatically by specifying the `pingInterval` option when instantiating the channel.
+
+### channel.retry(duration)
+
+Tell clients how many milliseconds (`duration`) they should wait before attempting to reconnect, if disconnected.
+
+### channel.send(msg, [clients])
+
+Send a message to all (or a subset of) connected clients.
+
+`msg` can either be a string or an object. Specifying just a string will send the message without any `id` or `event` name, and will not end up in the history for the channel. The alternative is to provide an object:
+ - `msg.data` - Data to send to the client. Data will be JSON-encoded if `jsonEncode` is enabled for the channel, otherwise it is sent as-is.
+ - `msg.id` - ID of the event. Used by clients when reconnecting to ensure all messages are received. You are required to specify this if you want the message to be added to the channel history and have clients request missed data on reconnects.
+ - `msg.event` - Event name, used on the client side to trigger on specific events.
+ - `msg.retry` - Retry timeout (same as `retry()`)
+
+### channel.sendEventsSinceId(response, sinceId)
+
+Send events since a given ID from the channel history to the specified client. Usually handled automatically on reconnect, but could be useful for more customized implementations.
+
+### channel.close()
+
+Close all connections on this channel. Note that this will usually only trigger all clients to reconnect, which is probably not what you want. You probably want to implement some sort of `disconnect`-contract between the server and client, before you call this.
+
+# Advanced example
 
 ```js
 var SseChannel = require('sse-channel');
