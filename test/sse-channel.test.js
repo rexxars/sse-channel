@@ -463,7 +463,6 @@ describe('sse-channel', function() {
             channel.send({ data: ['foo', 'bar'] });
             channel.send({ data: { foo: 'bar' } });
             channel.send({ data: 'Foobar' });
-            channel.send({ data: new Buffer('foo') });
         });
 
         es = new EventSource(host + path);
@@ -479,12 +478,6 @@ describe('sse-channel', function() {
             } else if (typeof data === 'object' && !data.type) {
                 // Assume object, third message
                 assert.equal(data.foo, 'bar');
-            } else {
-                // Assume serialized buffer, fourth message
-                assert.equal(data.type, 'Buffer');
-                assert.equal(data.data[0], 102);
-                assert.equal(data.data[1], 111);
-                assert.equal(data.data[2], 111);
                 done();
             }
         };
