@@ -1,7 +1,6 @@
 .gitignore
 .editorconfig
-.jshintignore
-.jshint
+.eslintignore
 .travis.yml
 npm-debug.log
 test/**/*
