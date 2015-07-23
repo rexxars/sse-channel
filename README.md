@@ -7,7 +7,7 @@ SSE-implementation which can be used to any node.js http request/response stream
 
 # Features
 
-  - Easily attach to any node.js http request
+  - Easily attach to any node.js http request ([express](examples/express/server.js), [hapi](examples/hapi/server.js), [node http](examples/node.js/server.js))
   - History is maintained automatically, max size is configurable
   - Optionally pre-populate history when creating the channel
   - Automatically sends missed events to clients when reconnecting
@@ -53,6 +53,8 @@ http.createServer(function(req, res) {
     console.log('Listening on http://127.0.0.1:7788/');
 });
 ```
+
+See [examples](examples/) for express/hapi/node server examples.
 
 # Options
 
