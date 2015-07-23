@@ -2,6 +2,7 @@
  * This file showcases how to set up SseChannel instances,
  * some common configuration parameters and how to broadcast data
  */
+'use strict';
 
 // Should be `require('sse-channel')` when outside of sse-channel repo
 var SseChannel = require('../');
