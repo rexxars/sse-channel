@@ -1,6 +1,6 @@
 {
   "name": "sse-channel",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Server-Sent Events \"channel\" where all messages are broadcasted to all connected clients, history is maintained automatically and server attempts to keep clients alive by sending \"keep-alive\" packets automatically.",
   "main": "index.js",
   "scripts": {
@@ -37,14 +37,14 @@
   },
   "homepage": "https://github.com/rexxars/sse-channel",
   "dependencies": {
-    "access-control": "0.0.7",
-    "lodash": "^3.7.0"
+    "access-control": "0.0.8",
+    "lodash": "^3.10.0"
   },
   "devDependencies": {
     "eslint": "^0.24.1",
     "eslint-config-vaffel": "^1.0.0",
     "eventsource": "^0.1.6",
-    "istanbul": "^0.3.13",
-    "mocha": "^2.2.4"
+    "istanbul": "^0.3.17",
+    "mocha": "^2.2.5"
   }
 }
