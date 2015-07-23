@@ -462,6 +462,7 @@ describe('sse-channel', function() {
             channel.send({ data: ['foo', 'bar'] });
             channel.send({ data: { foo: 'bar' } });
             channel.send({ data: 'Foobar' });
+            channel.send({ data: new Buffer('foo') });
         });
 
         es = new EventSource(host + path);
@@ -474,9 +475,15 @@ describe('sse-channel', function() {
             } else if (typeof data === 'string') {
                 // Assume second message
                 assert.equal(data, 'Foobar');
-            } else {
+            } else if (typeof data === 'object' && !data.type) {
                 // Assume object, third message
                 assert.equal(data.foo, 'bar');
+            } else {
+                // Assume serialized buffer, fourth message
+                assert.equal(data.type, 'Buffer');
+                assert.equal(data.data[0], 102);
+                assert.equal(data.data[1], 111);
+                assert.equal(data.data[2], 111);
                 done();
             }
         };
@@ -496,23 +503,36 @@ describe('sse-channel', function() {
         };
     });
 
-    it('treats buffers as strings when autoSerialize is turned off', function(done) {
-        initServer({ autoSerialize: false });
+    it('send string messages as JSON if jsonEncode is enabled', function(done) {
+        initServer({ jsonEncode: true });
 
-        var msg = 'Heard about this project called Imbo(.io)?';
         channel.on('connect', function() {
-            channel.send({ data: new Buffer(msg) });
+            channel.send('foobar');
         });
 
         es = new EventSource(host + path);
         es.onmessage = function(e) {
-            assert.equal(e.data, msg);
+            assert.equal(e.data, '"foobar"');
+            done();
+        };
+    });
+
+    it('send string messages as plain string if jsonEncode is disabled', function(done) {
+        initServer();
+
+        channel.on('connect', function() {
+            channel.send('foobar');
+        });
+
+        es = new EventSource(host + path);
+        es.onmessage = function(e) {
+            assert.equal(e.data, 'foobar');
             done();
         };
     });
 
     it('treats missing data property as empty string', function(done) {
-        initServer({ autoSerialize: false });
+        initServer();
 
         channel.on('connect', function() {
             channel.send({ id: 1337 });
