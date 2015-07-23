@@ -41,10 +41,14 @@
     "lodash": "^3.10.0"
   },
   "devDependencies": {
+    "compression": "^1.5.1",
     "eslint": "^0.24.1",
     "eslint-config-vaffel": "^1.0.0",
     "eventsource": "^0.1.6",
+    "express": "^4.13.1",
+    "hapi": "^8.8.0",
     "istanbul": "^0.3.17",
-    "mocha": "^2.2.5"
+    "mocha": "^2.2.5",
+    "node-static": "^0.7.7"
   }
 }
