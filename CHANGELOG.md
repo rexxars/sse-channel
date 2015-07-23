@@ -1,6 +1,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - 2015-07-23
+### Changed
+- `jsonEncode` will now encode any message (previously, specifying a string to `send` would send a non-JSON encoded string)
+- `addClient()` callback is now asyncronous in all cases, and provides an `Error` instance on CORS-failure
+- `sendMissedEvents()` is renamed to `sendEventsSinceId()`
+- `message` event now provides `channel` as first argument to listeners, to be consistent with `connect` and `disconnect` events
+
+### Added
+- A much richer README with proper documentation for options, methods and events
+- Examples of usage with Node.js HTTP server, express.js and hapi
+
 ## [1.0.6] - 2015-07-23
 ### Fixed
 - Call `flush()` on response object if it exists, fixes compression middleware in express
@@ -12,5 +23,6 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Changelog!
 
+[2.0.0]: https://github.com/rexxars/sse-channel/compare/1.0.6...2.0.0
 [1.0.6]: https://github.com/rexxars/sse-channel/compare/1.0.4...1.0.6
 [1.0.4]: https://github.com/rexxars/sse-channel/compare/1.0.3...1.0.4
