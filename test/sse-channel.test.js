@@ -654,14 +654,14 @@ describe('sse-channel', function() {
     });
 
     it('calls flush() after writes if the method exists on response', function(done) {
-        // Initialize a server with a custom `flush()` method added on each incoming request,
-        // mimicking the `compression` middleware. Check that we call `flush()`:
+        // Initialize a server with a custom `flushHeaders()` method added on each incoming request,
+        // mimicking the `compression` middleware. Check that we call `flushHeaders()`:
         //   - On connect, after the initial headers, retry, and preamble has been written
         //   - After "missed events" have been sent (once)
         //   - After each broadcast
         var flushes = 0;
         initServer({
-            flush: function() {
+            flushHeaders: function() {
                 flushes++;
             },
             history: [
