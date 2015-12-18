@@ -42,8 +42,8 @@
   },
   "devDependencies": {
     "compression": "^1.5.1",
-    "eslint": "^0.24.1",
-    "eslint-config-vaffel": "^1.0.0",
+    "eslint": "^1.10.3",
+    "eslint-config-vaffel": "^3.0.0",
     "eventsource": "^0.1.6",
     "express": "^4.13.1",
     "hapi": "^8.8.0",
