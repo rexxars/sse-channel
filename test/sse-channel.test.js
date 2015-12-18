@@ -585,8 +585,8 @@ describe('sse-channel', function() {
         var opts = url.parse(host + path);
         opts.method = 'OPTIONS';
         opts.headers = {
-            Accept: 'text/event-stream',
-            Origin: 'http://imbo.io',
+            'Accept': 'text/event-stream',
+            'Origin': 'http://imbo.io',
             'Last-Event-Id': '1337',
             'Access-Control-Request-Method': 'GET'
         };
