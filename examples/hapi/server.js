@@ -1,5 +1,6 @@
 /**
  * See `examples/channels.js` for how to set up SseChannel instances
+ * You need to run `npm install hapi` for this example to work
  */
 'use strict';
 

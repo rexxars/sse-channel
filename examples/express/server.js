@@ -1,5 +1,6 @@
 /**
  * See `examples/channels.js` for how to set up SseChannel instances
+ * You need to run `npm install express compression` in order for this example to work
  */
 'use strict';
 
