@@ -46,8 +46,8 @@ http.createServer(function(req, res) {
     if (req.url.indexOf('/channel/date') === 0) {
         dateChannel.addClient(req, res);
     } else {
-        response.writeHead(404);
-        response.end();
+        res.writeHead(404);
+        res.end();
     }
 }).listen(7788, '127.0.0.1', function() {
     console.log('Listening on http://127.0.0.1:7788/');
@@ -146,8 +146,8 @@ http.createServer(function(req, res) {
         // Serve the client using sysinfo SSE-channel
         sysInfoChannel.addClient(req, res);
     } else {
-        response.writeHead(404);
-        response.end();
+        res.writeHead(404);
+        res.end();
     }
 }).listen(7788, '127.0.0.1', function() {
     console.log('Listening on http://127.0.0.1:7788/');
