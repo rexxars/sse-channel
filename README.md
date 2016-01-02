@@ -119,6 +119,51 @@ Close all connections on this channel. Note that this will usually only trigger 
 * `disconnect` - When a client closes the connection for any reason. Listeners are provided with the following arguments: `channel`, `response`
 * `message` - When a message has been queued for sending. Listeners are provided with the following arguments: `channel`, `msg`, `clients`. In this case, `clients` is an array of either the clients provided or the full array of clients.
 
+# Client usage
+
+In browsers, use `EventSource` as you normally would. For browsers that don't natively support `EventSource`, I recommend amvtek's [polyfill](https://github.com/amvtek/EventSource). Basic client usage:
+
+```js
+var es = new EventSource('http://localhost:1337/channels/soccer-goals');
+es.addEventListener('goal', function(e) {
+    alert('GOAL! ' + e.data);
+});
+
+// On the server:
+soccerGoalChannel.send({
+    event: 'goal',
+    data: 'Manchester Utd - Swansea (2-1: Wayne Rooney)'
+})
+```
+
+Note that the above is the usage when using named events. The default (and most basic) way is:
+
+```js
+var es = new EventSource('http://localhost:1337/channels/ticker');
+es.onmessage = function(e) {
+    alert(e.data);
+};
+
+// On the server:
+tickerChannel.send({ data: 'Some message here' });
+```
+
+Also note that when using `jsonEncode` option of SSE-Channel, you'll have to decode the message on the client:
+
+```js
+var es = new EventSource('http://localhost:1337/channels/sysinfo');
+es.onmessage = function(e) {
+    var data = JSON.parse(e.data);
+    console.log('CPU usage: ' + e.cpuUsage);
+};
+
+// On the server:
+var sysInfoChannel = new SseChannel({ jsonEncode: true });
+sysInfoChannel.send({
+    data: { cpuUsage: 13.37 }
+});
+```
+
 # Advanced example
 
 ```js
