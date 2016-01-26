@@ -1,6 +1,6 @@
 {
   "name": "sse-channel",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Server-Sent Events \"channel\" where all messages are broadcasted to all connected clients, history is maintained automatically and server attempts to keep clients alive by sending \"keep-alive\" packets automatically.",
   "main": "index.js",
   "scripts": {
