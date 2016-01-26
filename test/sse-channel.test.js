@@ -3,10 +3,10 @@
 
 var url = require('url');
 var http = require('http');
-var merge = require('lodash/object/merge');
+var merge = require('lodash/merge');
 var assert = require('assert');
-var debounce = require('lodash/function/debounce');
-var runAfter = require('lodash/function/after');
+var debounce = require('lodash/debounce');
+var runAfter = require('lodash/after');
 var serverInit = require('./util/server-init');
 var SseChannel = require('../');
 var EventSource = require('eventsource');

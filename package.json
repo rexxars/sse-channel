@@ -6,10 +6,10 @@
   "scripts": {
     "coverage": "istanbul cover node_modules/.bin/_mocha -- --reporter spec",
     "lint": "eslint .",
-    "pretest": "npm run lint",
+    "posttest": "npm run lint",
     "test": "mocha --reporter spec",
     "test-travis": "istanbul cover node_modules/.bin/_mocha --report lcovonly -- --reporter spec",
-    "prepublish": "npm prune && npm test"
+    "prepublish": "in-publish && npm prune && npm test || not-in-publish"
   },
   "repository": {
     "type": "git",
@@ -37,15 +37,16 @@
   },
   "homepage": "https://github.com/rexxars/sse-channel",
   "dependencies": {
-    "access-control": "0.0.8",
-    "lodash": "^3.10.1"
+    "access-control": "1.0.0",
+    "in-publish": "^2.0.0",
+    "lodash": "^4.0.1"
   },
   "devDependencies": {
     "eslint": "^1.10.3",
     "eslint-config-vaffel": "^4.0.0",
     "eventsource": "^0.1.6",
-    "istanbul": "^0.3.17",
-    "mocha": "^2.2.5",
+    "istanbul": "^0.4.2",
+    "mocha": "^2.4.1",
     "node-static": "^0.7.7"
   }
 }
