@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.0.4] - 2017-02-10
+### Changed
+- Content-Type header now includes charset (UTF-8)
+
+## [2.0.3] - 2016-12-11
+### Fixed
+- Make connection count more reliable (William Neely)
+
 ## [2.0.0] - 2015-07-23
 ### Changed
 - `jsonEncode` will now encode any message (previously, specifying a string to `send` would send a non-JSON encoded string)
