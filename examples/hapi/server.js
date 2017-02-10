@@ -23,7 +23,7 @@ server.route({
         }
 
         channels[chan].addClient(request.raw.req, request.raw.res);
-        reply.close({ end: false });
+        return reply.close({ end: false });
     }
 });
 

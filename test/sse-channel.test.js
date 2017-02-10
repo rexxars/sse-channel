@@ -31,7 +31,8 @@ describe('sse-channel', function() {
         }
 
         if (server && server.close) {
-            return server.close(done);
+            server.close(done);
+            return;
         }
 
         done();
