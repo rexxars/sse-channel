@@ -1,11 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.0.4] - 2017-02-10
+## [2.0.5] - 2017-02-10
+### Fixed
+- Fixed `flush()` deprecation warnings
+
+## 2.0.4 - 2017-02-10
 ### Changed
 - Content-Type header now includes charset (UTF-8)
 
-## [2.0.3] - 2016-12-11
+## 2.0.3 - 2016-12-11
 ### Fixed
 - Make connection count more reliable (William Neely)
 
@@ -31,6 +35,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Changelog!
 
+[2.0.5]: https://github.com/rexxars/sse-channel/compare/v2.0.4...v2.0.5
 [2.0.0]: https://github.com/rexxars/sse-channel/compare/1.0.6...2.0.0
 [1.0.6]: https://github.com/rexxars/sse-channel/compare/1.0.4...1.0.6
 [1.0.4]: https://github.com/rexxars/sse-channel/compare/1.0.3...1.0.4
