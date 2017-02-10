@@ -7,8 +7,8 @@ module.exports = function(opts) {
     var channel = new Channel(opts);
 
     var server = http.createServer(function(req, res) {
-        if (opts.flush) {
-            res.flush = opts.flush;
+        if (opts.flushHeaders) {
+            res.flushHeaders = opts.flushHeaders;
         }
 
         channel.addClient(req, res, opts.addClientCallback);
