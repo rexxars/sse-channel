@@ -42,11 +42,11 @@
     "lodash": "^4.0.1"
   },
   "devDependencies": {
-    "eslint": "^1.10.3",
-    "eslint-config-vaffel": "^4.0.0",
-    "eventsource": "^0.1.6",
+    "eslint": "^3.15.0",
+    "eslint-config-vaffel": "^5.0.0",
+    "eventsource": "^0.2.1",
     "istanbul": "^0.4.2",
-    "mocha": "^2.4.1",
+    "mocha": "^3.2.0",
     "node-static": "^0.7.7"
   }
 }
