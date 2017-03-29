@@ -109,7 +109,7 @@ Send events since a given ID from the channel history to the specified client. U
 
 ### channel.close()
 
-Close all connections on this channel. Note that this will usually only trigger all clients to reconnect, which is probably not what you want. You probably want to implement some sort of `disconnect`-contract between the server and client, before you call this.
+Close all connections on this channel and stop sending "keep alive"-pings. Note that this will usually only trigger all clients to reconnect, which is probably not what you want. You might want to implement some sort of `disconnect`-contract between the server and client, before you call this.
 
 # Events
 

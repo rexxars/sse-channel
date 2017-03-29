@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.0.6] - 2017-03-29
+### Fixed
+- Stop "keep-alive" ping when calling `close()` on a channel
+
 ## [2.0.5] - 2017-02-10
 ### Fixed
 - Fixed `flush()` deprecation warnings
@@ -35,6 +39,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Changelog!
 
+[2.0.6]: https://github.com/rexxars/sse-channel/compare/v2.0.5...v2.0.6
 [2.0.5]: https://github.com/rexxars/sse-channel/compare/v2.0.4...v2.0.5
 [2.0.0]: https://github.com/rexxars/sse-channel/compare/1.0.6...2.0.0
 [1.0.6]: https://github.com/rexxars/sse-channel/compare/1.0.4...1.0.6
