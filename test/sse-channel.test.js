@@ -662,7 +662,7 @@ describe('sse-channel', function() {
         //   - After each broadcast
         var flushes = 0;
         initServer({
-            flush: function() {
+            flushHeaders: function() {
                 flushes++;
             },
             history: [
