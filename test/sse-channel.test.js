@@ -30,6 +30,10 @@ describe('sse-channel', function() {
             es.close();
         }
 
+        if (channel) {
+            channel.close();
+        }
+
         if (server && server.close) {
             server.close(done);
             return;
