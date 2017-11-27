@@ -9,7 +9,7 @@
     "posttest": "npm run lint",
     "test": "mocha --reporter spec",
     "test-travis": "istanbul cover node_modules/.bin/_mocha --report lcovonly -- --reporter spec",
-    "prepublish": "in-publish && npm prune && npm test || not-in-publish"
+    "prepublishOnly": "npm test"
   },
   "repository": {
     "type": "git",
@@ -38,7 +38,6 @@
   "homepage": "https://github.com/rexxars/sse-channel",
   "dependencies": {
     "access-control": "1.0.0",
-    "in-publish": "^2.0.0",
     "lodash": "^4.0.1"
   },
   "devDependencies": {
