@@ -607,6 +607,28 @@ describe('sse-channel', function() {
         req.end();
     });
 
+    it('can be configured to disregard CORS', function(done) {
+        initServer({ cors: false });
+
+        var opts = url.parse(host + path);
+        opts.method = 'OPTIONS';
+        opts.headers = {
+            'Accept': 'text/event-stream',
+            'Origin': 'http://imbo.io',
+            'Last-Event-Id': '1337',
+            'Access-Control-Request-Method': 'GET'
+        };
+
+        var req = http.request(opts, function(res) {
+            assert.equal(typeof res.headers['access-control-allow-origin'], 'undefined');
+
+            req.abort();
+            done();
+        });
+
+        req.end();
+    });
+
     it('sends initial retry-timeout if specified in channel config', function(done) {
         initServer({ retryTimeout: 3000 });
 

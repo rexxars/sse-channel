@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2018-06-06
+### Added
+- Add ability to disable CORS-checking by passing `false` as the `cors` option
+
 ## [2.0.6] - 2017-03-29
 ### Fixed
 - Stop "keep-alive" ping when calling `close()` on a channel
