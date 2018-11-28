@@ -434,6 +434,40 @@ describe('sse-channel', function() {
         req.end();
     });
 
+    it('sends custom automatic ping', function(done) {
+        var interval = 25;
+        var message = {
+            data: '',
+            event: 'KEEP-ALIVE',
+            id: 'id'
+        };
+        initServer({ pingInterval: interval, keepAliveMessage: message });
+
+        var opts = url.parse(host + path);
+        opts.headers = { Accept: 'text/event-stream' };
+
+        var initialMessage = ':ok\n\n';
+        var parsedKeepAliveMessage = 'event: KEEP-ALIVE\nid: id\ndata: ""\n\n\n';
+
+        var req = http.request(opts, function(res) {
+            var buf = '';
+            res.on('data', function(chunk) {
+                buf += chunk.toString();
+            });
+
+            setTimeout(function() {
+                req.abort();
+                assert.equal(
+                    buf, initialMessage + parsedKeepAliveMessage
+                );
+                done();
+            }, interval);
+        });
+
+        req.setNoDelay(true);
+        req.end();
+    });
+
     it('sends "preamble" if client requests it', function(done) {
         initServer();
 
