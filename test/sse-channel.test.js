@@ -437,8 +437,8 @@ describe('sse-channel', function() {
     it('sends custom automatic ping', function(done) {
         var interval = 25;
         var message = {
-            data: null,
             event: 'KEEP-ALIVE',
+            data: null,
             id: 1
         };
         initServer({ pingInterval: interval, keepAliveMessage: message });
@@ -447,7 +447,7 @@ describe('sse-channel', function() {
         opts.headers = { Accept: 'text/event-stream' };
 
         var initialMessage = ':ok\n\n';
-        var parsedKeepAliveMessage = 'event: KEEP-ALIVE\nid: 1\ndata: \n\n\n';
+        var parsedKeepAliveMessage = 'event: KEEP-ALIVE\ndata: \nid: 1\n\n\n';
 
         var req = http.request(opts, function(res) {
             var buf = '';
