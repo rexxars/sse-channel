@@ -38,7 +38,7 @@
   "homepage": "https://github.com/rexxars/sse-channel",
   "dependencies": {
     "access-control": "1.0.1",
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.13"
   },
   "devDependencies": {
     "eslint": "^4.12.0",
