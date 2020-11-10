@@ -38,7 +38,6 @@ dataProvider.on('sysinfo', function(sysinfo) {
  */
 var randomChannel = new SseChannel({
     historySize: 5,
-    cors: { origins: ['*'] },
     pingInterval: 60 * 1000,
     jsonEncode: true
 });
