@@ -1,7 +1,7 @@
 sse-channel (Server-Sent Events channel)
 ========================================
 
-[![Version npm](http://img.shields.io/npm/v/sse-channel.svg?style=flat-square)](http://browsenpm.org/package/sse-channel)[![Build Status](http://img.shields.io/travis/rexxars/sse-channel/master.svg?style=flat-square)](https://travis-ci.org/rexxars/sse-channel)[![Coverage Status](http://img.shields.io/coveralls/rexxars/sse-channel/master.svg?style=flat-square)](https://coveralls.io/r/rexxars/sse-channel?branch=master)[![Code Climate](http://img.shields.io/codeclimate/github/rexxars/sse-channel.svg?style=flat-square)](https://codeclimate.com/github/rexxars/sse-channel/)
+[![Version npm](http://img.shields.io/npm/v/sse-channel.svg?style=flat-square)](http://browsenpm.org/package/sse-channel)[![Build Status](http://img.shields.io/travis/rexxars/sse-channel/main.svg?style=flat-square)](https://travis-ci.org/rexxars/sse-channel)[![Coverage Status](http://img.shields.io/coveralls/rexxars/sse-channel/main.svg?style=flat-square)](https://coveralls.io/r/rexxars/sse-channel?branch=main)[![Code Climate](http://img.shields.io/codeclimate/github/rexxars/sse-channel.svg?style=flat-square)](https://codeclimate.com/github/rexxars/sse-channel/)
 
 SSE-implementation which can be used to any node.js http request/response stream.
 
@@ -15,7 +15,6 @@ SSE-implementation which can be used to any node.js http request/response stream
   - Easily send messages to all clients or to specific clients
   - Configurable reconnection timeout
   - Auto-encode packets as JSON (configurable)
-  - Supports CORS
   - Supports a [number](https://github.com/amvtek/EventSource) of [different](https://github.com/Yaffle/EventSource/) [polyfills](https://github.com/remy/polyfills/blob/master/EventSource.js)
   - Works with the [compression](https://github.com/expressjs/compression) middleware
   - If polyfilled on the client side, works down to IE8 and Android 2.x
@@ -65,7 +64,6 @@ The following are available as options to the `SseChannel` constructor.
 - `retryTimeout` - How many milliseconds clients should wait before attempting to reconnect, if disconnected. Default: `undefined` - browser default.
 - `pingInterval` - How often the server should send a "ping" to clients in order to keep the connection alive (milliseconds). Default: `20000` (20s)
 - `jsonEncode` - Whether the client should auto-encode messages as JSON before sending. Default: `false`.
-- `cors` - An object of options related to Cross-Origin Resource Sharing. Uses the [access-control](https://www.npmjs.org/package/access-control) module - see that for options. Note: The `Last-Event-ID`-header needs to be allowed. By default, no origins are allowed.
 
 # Methods
 
@@ -75,7 +73,7 @@ All instances of `SseChannel` have the following methods:
 
 Add a client to the channel. `request` is the `http.IncomingMessage` instance for the connection, while `response` is the `http.ServerResponse` instance to write data to.
 
-If specified, the `callback` supplied will be called once the client has been added. The first argument to the callback can be an error if the request was cross-origin and did not validate against the provided CORS configuration.
+If specified, the `callback` supplied will be called once the client has been added.
 
 ### channel.removeClient(response)
 
@@ -178,9 +176,6 @@ var sysInfoChannel = new SseChannel({
     historySize: 300,
     pingInterval: 15000,
     jsonEncode: true,
-    cors: {
-        origins: ['*'] // Defaults to []
-    }
 });
 
 // Set up an HTTP server

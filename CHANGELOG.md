@@ -1,9 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [2.1.0] - 2018-06-06
+## [4.0.0] - 2020-11-19
+- BREAKING: Only support Node v10 and higher
+- BREAKING: Remove CORS-handling - use `cors` module or similar
+
+## [3.1.0] - 2018-06-06
 ### Added
 - Add ability to disable CORS-checking by passing `false` as the `cors` option
+
+## [3.0.0] - 2017-11-27
+- BREAKING: Only support Node v4 and higher
 
 ## [2.0.6] - 2017-03-29
 ### Fixed
@@ -43,6 +50,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Changelog!
 
+[4.0.0]: https://github.com/rexxars/sse-channel/compare/v3.1.0...v4.0.0
+[3.1.0]: https://github.com/rexxars/sse-channel/compare/v3.0.0...v3.1.0
+[3.0.0]: https://github.com/rexxars/sse-channel/compare/v2.0.6...v3.0.0
 [2.0.6]: https://github.com/rexxars/sse-channel/compare/v2.0.5...v2.0.6
 [2.0.5]: https://github.com/rexxars/sse-channel/compare/v2.0.4...v2.0.5
 [2.0.0]: https://github.com/rexxars/sse-channel/compare/1.0.6...2.0.0

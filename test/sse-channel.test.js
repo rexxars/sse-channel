@@ -59,7 +59,7 @@ describe('sse-channel', function() {
 
         es = new EventSource(host + path);
         es.onmessage = function(e) {
-            assert.equal(e.data, text);
+            assert.strictEqual(e.data, text);
             done();
         };
     });
@@ -73,7 +73,7 @@ describe('sse-channel', function() {
 
         es = new EventSource(host + path);
         es.onmessage = function(e) {
-            assert.equal(e.type, 'message');
+            assert.strictEqual(e.type, 'message');
             done();
         };
     });
@@ -87,21 +87,6 @@ describe('sse-channel', function() {
         });
 
         es = new EventSource(host + path);
-    });
-
-    it('addClient calls the specified callback with error if cors fails', function(done) {
-        initServer({
-            addClientCallback: function(err) {
-                assert.ok(err);
-                done();
-            }
-        });
-
-        es = new EventSource(host + path, {
-            headers: {
-                Origin: 'http://imbo.io'
-            }
-        });
     });
 
     it('can send messages to specific clients', function(done) {
@@ -128,7 +113,7 @@ describe('sse-channel', function() {
             // Should receive the message
             var es2 = new EventSource(host + path);
             es2.onmessage = function(e) {
-                assert.equal(e.data, privText);
+                assert.strictEqual(e.data, privText);
                 es2.close();
 
                 // Ensure the history is not populated with the "private" message
@@ -142,7 +127,7 @@ describe('sse-channel', function() {
                         throw new Error('"Private" message found in history');
                     }
 
-                    assert.equal(e3.data, pubText);
+                    assert.strictEqual(e3.data, pubText);
                     done();
                 };
             };
@@ -160,9 +145,9 @@ describe('sse-channel', function() {
 
         es = new EventSource(host + path);
         es.addEventListener('drink', function(e) {
-            assert.equal(e.lastEventId, '1337');
-            assert.equal(e.type, 'drink');
-            assert.equal(e.data, data);
+            assert.strictEqual(e.lastEventId, '1337');
+            assert.strictEqual(e.type, 'drink');
+            assert.strictEqual(e.data, data);
             done();
         }, false);
     });
@@ -215,7 +200,7 @@ describe('sse-channel', function() {
             }
 
             // Data should correspond to the last message we sent
-            assert.equal(e.data, 'Event #' + id);
+            assert.strictEqual(e.data, 'Event #' + id);
             done();
         };
     });
@@ -233,7 +218,7 @@ describe('sse-channel', function() {
             if (++msgCount !== 6) {
                 return;
             }
-            assert.equal(e.data, 'Event #' + id);
+            assert.strictEqual(e.data, 'Event #' + id);
             done();
         };
     });
@@ -251,7 +236,7 @@ describe('sse-channel', function() {
             if (++msgCount !== 6) {
                 return;
             }
-            assert.equal(e.data, 'Event #' + id);
+            assert.strictEqual(e.data, 'Event #' + id);
             done();
         };
     });
@@ -271,7 +256,7 @@ describe('sse-channel', function() {
 
         es.onmessage = function(e) {
             if (++msgCount === 1) {
-                assert.equal(e.data, 'Boom');
+                assert.strictEqual(e.data, 'Boom');
                 done();
             }
         };
@@ -286,8 +271,8 @@ describe('sse-channel', function() {
         }
 
         var assertMsgCount = debounce(function() {
-            assert.equal(msgCount, 4);
-            assert.equal(lastMsg.data, 'Event #' + id);
+            assert.strictEqual(msgCount, 4);
+            assert.strictEqual(lastMsg.data, 'Event #' + id);
             done();
         }, 25);
 
@@ -308,8 +293,8 @@ describe('sse-channel', function() {
         }
 
         var assertMsgCount = debounce(function() {
-            assert.equal(msgCount, 1);
-            assert.equal(lastMsg.data, 'Event #' + id);
+            assert.strictEqual(msgCount, 1);
+            assert.strictEqual(lastMsg.data, 'Event #' + id);
             done();
         }, 25);
 
@@ -330,8 +315,8 @@ describe('sse-channel', function() {
         }
 
         var assertMsgCount = debounce(function() {
-            assert.equal(msgCount, 5);
-            assert.equal(lastMsg.data, 'Event #' + id);
+            assert.strictEqual(msgCount, 5);
+            assert.strictEqual(lastMsg.data, 'Event #' + id);
             done();
         }, 25);
 
@@ -353,8 +338,8 @@ describe('sse-channel', function() {
 
         var msgCount = 0, lastMsg;
         var assertMsgCount = debounce(function() {
-            assert.equal(msgCount, 5);
-            assert.equal(lastMsg.data, 'Event #' + id);
+            assert.strictEqual(msgCount, 5);
+            assert.strictEqual(lastMsg.data, 'Event #' + id);
             done();
         }, 25);
 
@@ -370,12 +355,12 @@ describe('sse-channel', function() {
         initServer();
 
         var connections = channel.getConnectionCount();
-        assert.equal(connections, 0, 'Initial connection count should be 0, got ' + connections);
+        assert.strictEqual(connections, 0, 'Initial connection count should be 0, got ' + connections);
 
         es = new EventSource(host + path);
         es.onopen = function() {
             connections = channel.getConnectionCount();
-            assert.equal(
+            assert.strictEqual(
                 connections,
                 1,
                 'Connection count after opening first connection should be 1, got ' + connections
@@ -385,7 +370,7 @@ describe('sse-channel', function() {
                 var es2 = new EventSource(host + path);
                 es2.onopen = function() {
                     connections = channel.getConnectionCount();
-                    assert.equal(
+                    assert.strictEqual(
                         connections,
                         2,
                         'Connection count after opening second connection should be 2, got ' + connections
@@ -394,7 +379,7 @@ describe('sse-channel', function() {
 
                     setTimeout(function() {
                         connections = channel.getConnectionCount();
-                        assert.equal(
+                        assert.strictEqual(
                             connections,
                             1,
                             'Connection count after disconnecting one session should be 1, got ' + connections
@@ -475,14 +460,14 @@ describe('sse-channel', function() {
             var data = JSON.parse(e.data);
             if (Array.isArray(data)) {
                 // Assume first message
-                assert.equal(data[0], 'foo');
-                assert.equal(data[1], 'bar');
+                assert.strictEqual(data[0], 'foo');
+                assert.strictEqual(data[1], 'bar');
             } else if (typeof data === 'string') {
                 // Assume second message
-                assert.equal(data, 'Foobar');
+                assert.strictEqual(data, 'Foobar');
             } else if (typeof data === 'object' && !data.type) {
                 // Assume object, third message
-                assert.equal(data.foo, 'bar');
+                assert.strictEqual(data.foo, 'bar');
                 done();
             }
         };
@@ -497,7 +482,7 @@ describe('sse-channel', function() {
 
         es = new EventSource(host + path);
         es.onmessage = function(e) {
-            assert.equal(e.data, '[object Object]');
+            assert.strictEqual(e.data, '[object Object]');
             done();
         };
     });
@@ -511,7 +496,7 @@ describe('sse-channel', function() {
 
         es = new EventSource(host + path);
         es.onmessage = function(e) {
-            assert.equal(e.data, '"foobar"');
+            assert.strictEqual(e.data, '"foobar"');
             done();
         };
     });
@@ -525,7 +510,7 @@ describe('sse-channel', function() {
 
         es = new EventSource(host + path);
         es.onmessage = function(e) {
-            assert.equal(e.data, 'foobar');
+            assert.strictEqual(e.data, 'foobar');
             done();
         };
     });
@@ -539,7 +524,7 @@ describe('sse-channel', function() {
 
         es = new EventSource(host + path);
         es.onmessage = function(e) {
-            assert.equal(e.data, '');
+            assert.strictEqual(e.data, '');
             done();
         };
     });
@@ -562,71 +547,9 @@ describe('sse-channel', function() {
 
         es = new EventSource(host + path);
         es.onmessage = function(e) {
-            assert.equal(e.data, text);
+            assert.strictEqual(e.data, text);
             done();
         };
-    });
-
-    it('does not allow CORS by default', function(done) {
-        initServer();
-
-        es = new EventSource(host + path, {
-            headers: {
-                Origin: 'http://imbo.io'
-            }
-        });
-
-        es.onerror = function(e) {
-            assert.equal(e.status, 403);
-            done();
-        };
-    });
-
-    it('can be configured to allow CORS', function(done) {
-        initServer({ cors: {
-            origins: ['http://imbo.io']
-        }});
-
-        var opts = url.parse(host + path);
-        opts.method = 'OPTIONS';
-        opts.headers = {
-            'Accept': 'text/event-stream',
-            'Origin': 'http://imbo.io',
-            'Last-Event-Id': '1337',
-            'Access-Control-Request-Method': 'GET'
-        };
-
-        var req = http.request(opts, function(res) {
-            assert.equal(res.headers['access-control-allow-origin'], 'http://imbo.io');
-            assert.equal(res.headers['access-control-allow-headers'], 'Last-Event-ID');
-
-            req.abort();
-            done();
-        });
-
-        req.end();
-    });
-
-    it('can be configured to disregard CORS', function(done) {
-        initServer({ cors: false });
-
-        var opts = url.parse(host + path);
-        opts.method = 'OPTIONS';
-        opts.headers = {
-            'Accept': 'text/event-stream',
-            'Origin': 'http://imbo.io',
-            'Last-Event-Id': '1337',
-            'Access-Control-Request-Method': 'GET'
-        };
-
-        var req = http.request(opts, function(res) {
-            assert.equal(typeof res.headers['access-control-allow-origin'], 'undefined');
-
-            req.abort();
-            done();
-        });
-
-        req.end();
     });
 
     it('sends initial retry-timeout if specified in channel config', function(done) {
@@ -703,7 +626,7 @@ describe('sse-channel', function() {
             channel.send('With seven million barrels of porter');
         };
         es.onmessage = runAfter(4, function() {
-            assert.equal(flushes, 4);
+            assert.strictEqual(flushes, 4);
             done();
         });
     });
@@ -719,7 +642,7 @@ describe('sse-channel', function() {
         };
 
         channel.on('connect', function(chan, req, res) {
-            assert.equal(channel, chan);
+            assert.strictEqual(channel, chan);
             assert.ok(req instanceof http.IncomingMessage);
             assert.ok(res instanceof http.ServerResponse);
 
@@ -730,16 +653,16 @@ describe('sse-channel', function() {
         });
 
         channel.on('message', function(chan, msg, clients) {
-            assert.equal(channel, chan);
+            assert.strictEqual(channel, chan);
 
             if (++status.message === 1) {
-                assert.equal(msg, 'foobar');
-                assert.equal(clients.length, 2);
+                assert.strictEqual(msg, 'foobar');
+                assert.strictEqual(clients.length, 2);
                 assert.ok(clients[0] instanceof http.ServerResponse);
                 assert.ok(clients[1] instanceof http.ServerResponse);
             } else {
-                assert.equal(msg.data, 'barfoo');
-                assert.equal(clients.length, 1);
+                assert.strictEqual(msg.data, 'barfoo');
+                assert.strictEqual(clients.length, 1);
                 assert.ok(clients[0] instanceof http.ServerResponse);
 
                 connections.forEach(function(conn) {
@@ -749,13 +672,13 @@ describe('sse-channel', function() {
         });
 
         channel.on('disconnect', function(chan, res) {
-            assert.equal(channel, chan);
+            assert.strictEqual(channel, chan);
             assert.ok(res instanceof http.ServerResponse);
 
             if (++status.disconnect === 2) {
-                assert.equal(status.connect, 2);
-                assert.equal(status.disconnect, 2);
-                assert.equal(status.message, 2);
+                assert.strictEqual(status.connect, 2);
+                assert.strictEqual(status.disconnect, 2);
+                assert.strictEqual(status.message, 2);
                 done();
             }
         });

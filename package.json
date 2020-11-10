@@ -4,11 +4,9 @@
   "description": "Server-Sent Events \"channel\" where all messages are broadcasted to all connected clients, history is maintained automatically and server attempts to keep clients alive by sending \"keep-alive\" packets automatically.",
   "main": "index.js",
   "scripts": {
-    "coverage": "istanbul cover node_modules/.bin/_mocha -- --reporter spec",
-    "lint": "eslint .",
-    "posttest": "npm run lint",
+    "coverage": "nyc node_modules/.bin/_mocha -- --reporter spec",
     "test": "mocha --reporter spec",
-    "test-travis": "istanbul cover node_modules/.bin/_mocha --report lcovonly -- --reporter spec",
+    "test-travis": "nyc node_modules/.bin/_mocha --report lcovonly -- --reporter spec",
     "prepublishOnly": "npm test"
   },
   "repository": {
@@ -29,23 +27,10 @@
   "bugs": {
     "url": "https://github.com/rexxars/sse-channel/issues"
   },
-  "eslintConfig": {
-    "extends": "vaffel",
-    "rules": {
-      "no-bitwise": 0
-    }
-  },
   "homepage": "https://github.com/rexxars/sse-channel",
-  "dependencies": {
-    "access-control": "1.0.1",
-    "lodash": "^4.17.10"
-  },
   "devDependencies": {
-    "eslint": "^4.12.0",
-    "eslint-config-vaffel": "^5.0.0",
-    "eventsource": "^1.0.5",
-    "istanbul": "^0.4.2",
-    "mocha": "^4.0.1",
-    "node-static": "^0.7.10"
+    "eventsource": "^1.0.7",
+    "mocha": "^8.2.1",
+    "nyc": "^15.1.0"
   }
 }
