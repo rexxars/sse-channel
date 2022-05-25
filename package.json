@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/rexxars/sse-channel",
   "devDependencies": {
-    "eventsource": "^1.0.7",
+    "eventsource": "^2.0.2",
     "mocha": "^8.2.1",
     "nyc": "^15.1.0"
   }
