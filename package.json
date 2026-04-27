@@ -28,8 +28,11 @@
     "url": "https://github.com/rexxars/sse-channel/issues"
   },
   "homepage": "https://github.com/rexxars/sse-channel",
+  "dependencies": {
+    "eventsource-encoder": "^1.0.2"
+  },
   "devDependencies": {
-    "eventsource": "^1.0.7",
+    "eventsource": "^4.1.0",
     "mocha": "^8.2.1",
     "nyc": "^15.1.0"
   }

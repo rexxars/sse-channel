@@ -9,7 +9,7 @@ var debounce = require('lodash/debounce');
 var runAfter = require('lodash/after');
 var serverInit = require('./util/server-init');
 var SseChannel = require('../');
-var EventSource = require('eventsource');
+var EventSource = require('eventsource').EventSource;
 
 describe('sse-channel', function() {
     this.timeout(5000);
@@ -120,7 +120,12 @@ describe('sse-channel', function() {
                 var pubText = 'Public';
                 channel.send({ id: 2, data: pubText });
 
-                var es3 = new EventSource(host + path, { headers: { 'Last-Event-Id': '0' } });
+                var es3 = new EventSource(host + path, {
+                    fetch: (url, opts) => {
+                        opts.headers['Last-Event-Id'] = '1';
+                        return fetch(url, opts);
+                    }
+                });
                 es3.onmessage = function(e3) {
                     es3.close();
                     if (e3.data === privText) {
@@ -193,7 +198,12 @@ describe('sse-channel', function() {
             channel.send({ id: ++id, data: 'Event #' + id });
         }
 
-        es = new EventSource(host + path, { headers: { 'Last-Event-Id': '1337' } });
+        es = new EventSource(host + path, {
+            fetch: (url, opts) => {
+                opts.headers['Last-Event-Id'] = '1337';
+                return fetch(url, opts);
+            }
+        });
         es.onmessage = function(e) {
             if (++msgCount !== 6) {
                 return;
@@ -481,7 +491,7 @@ describe('sse-channel', function() {
         });
 
         es = new EventSource(host + path);
-        es.onmessage = function(e) {
+        es.onmessage = function (e) {
             assert.strictEqual(e.data, '[object Object]');
             done();
         };
