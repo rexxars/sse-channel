@@ -539,6 +539,21 @@ describe('sse-channel', function() {
         };
     });
 
+    it('JSON-encodes missing data property when jsonEncode enabled', function(done) {
+        initServer({ jsonEncode: true });
+
+        channel.on('connect', function() {
+            channel.send({ event: 'restart' });
+        });
+
+        es = new EventSource(host + path);
+        es.addEventListener('restart', function(e) {
+            assert.strictEqual(e.data, '""');
+            assert.doesNotThrow(function() { JSON.parse(e.data); });
+            done();
+        }, false);
+    });
+
     it('handles multi-line strings properly', function(done) {
         initServer();
 
